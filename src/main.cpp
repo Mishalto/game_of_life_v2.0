@@ -90,6 +90,14 @@ void copy_grid(std::vector<std::vector<sf::RectangleShape>>& grid, std::vector<s
     }
 }
 
+void draw_grid(sf::RenderWindow& window, std::vector<std::vector<sf::RectangleShape>>& grid) {
+    for (const auto& s : grid) {
+        for (const auto& j : s) {
+            window.draw(j);
+        }
+    }
+}
+
 void check_events(sf::RenderWindow& window) {
     while (const std::optional event = window.pollEvent())
     {
@@ -119,6 +127,7 @@ int main()
 
     while (window.isOpen())
     {
+        copy_grid(grid, next_grid);
         sf::Time elapsed = clock.getElapsedTime();
 
         check_events(window);
@@ -128,14 +137,9 @@ int main()
         }
 
         window.clear();
-        for (const auto& s : grid) {
-            for (const auto& j : s) {
-                window.draw(j);
-            }
-        }
+        draw_grid(window, grid);
         window.display();
 
-        copy_grid(grid, next_grid);
     }
 
     return 0;
