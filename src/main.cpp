@@ -78,6 +78,17 @@ void update_grid(std::vector<std::vector<sf::RectangleShape>>& grid, std::vector
     }
 }
 
+void copy_grid(std::vector<std::vector<sf::RectangleShape>>& grid, std::vector<std::vector<bool>>& next_grid) {
+    for (int i = 0; i < static_cast<int>(grid.size()); ++i) {
+        for (int j = 0; j < static_cast<int>(grid[i].size()); ++j) {
+            if (next_grid[i][j]) {
+                grid[i][j].setFillColor(sf::Color::Cyan);
+            } else {
+                grid[i][j].setFillColor(sf::Color::Black);
+            }
+        }
+    }
+}
 
 void check_events(sf::RenderWindow& window) {
     while (const std::optional event = window.pollEvent())
@@ -124,15 +135,7 @@ int main()
         }
         window.display();
 
-        for (int i = 0; i < static_cast<int>(grid.size()); ++i) {
-            for (int j = 0; j < static_cast<int>(grid[i].size()); ++j) {
-                if (next_grid[i][j]) {
-                    grid[i][j].setFillColor(sf::Color::Cyan);
-                } else {
-                    grid[i][j].setFillColor(sf::Color::Black);
-                }
-            }
-        }
+        copy_grid(grid, next_grid);
     }
 
     return 0;
