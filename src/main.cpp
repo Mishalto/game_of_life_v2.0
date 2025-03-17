@@ -16,7 +16,17 @@ void init_grid(std::vector<std::vector<sf::RectangleShape>>& grid) {
 }
 
 void set_start_postion(std::vector<std::vector<sf::RectangleShape>>& grid, std::vector<std::vector<bool>>& next_grid) {
-    std::vector<std::pair<int, int>> start_pos = {{28, 42}, {29, 42}, {30, 42}, {31, 42}, {32, 42}};    // y/x format
+    std::vector<std::pair<int, int>> start_pos = {
+        {10, 10}, {10, 11}, {11, 10}, {11, 11},
+        {10, 20}, {11, 20}, {12, 20}, {9, 21}, {13, 21}, {8, 22}, {14, 22}, {8, 23}, {14, 23}, {11, 24},
+        {9, 25}, {13, 25}, {10, 26}, {11, 26}, {12, 26}, {11, 27},
+        {8, 30}, {9, 30}, {10, 30}, {8, 31}, {9, 31}, {10, 31},
+        {7, 32}, {11, 32}, {6, 34}, {7, 34}, {11, 34}, {12, 34},
+        {8, 44}, {9, 44}, {8, 45}, {9, 45}
+    };
+    
+
+
     for (const auto& s : start_pos) {
         grid[s.first][s.second].setFillColor(sf::Color::Cyan);
     }
@@ -97,7 +107,7 @@ int main()
     set_start_postion(grid, next_grid);
 
     sf::Clock clock;
-    constexpr sf::Time delay = sf::seconds(0.25f);
+    constexpr sf::Time delay = sf::seconds(0.1f);
 
     while (window.isOpen())
     {
