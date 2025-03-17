@@ -15,6 +15,13 @@ void init_grid(std::vector<std::vector<sf::RectangleShape>>& grid) {
     }
 }
 
+void set_start_postion(std::vector<std::vector<sf::RectangleShape>>& grid) {
+    std::vector<std::pair<int, int>> start_pos = {{20, 13}, {20, 14}, {20, 15}, {20, 16}, {20, 17}};
+    for (const auto& s : start_pos) {
+        grid[s.second][s.first].setFillColor(sf::Color::Cyan);
+    }
+}
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode({width, height}), "Game of Life 2.0", sf::Style::None);
@@ -22,6 +29,7 @@ int main()
 
     std::vector<std::vector<sf::RectangleShape>> grid(y_cells, std::vector<sf::RectangleShape>(x_cells));
     init_grid(grid);
+    set_start_postion(grid);
 
     while (window.isOpen())
     {
@@ -30,7 +38,6 @@ int main()
             if (event->is<sf::Event::Closed>())
                 window.close();
         }
-
         window.clear();
         for (const auto& s : grid) {
             for (const auto& j : s) {
