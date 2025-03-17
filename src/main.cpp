@@ -9,8 +9,7 @@ void init_grid(std::vector<std::vector<sf::RectangleShape>>& grid) {
         for (size_t j = 0; j < grid[i].size(); ++j) {
             grid[i][j].setFillColor(sf::Color::Black);
             grid[i][j].setSize({cell_size, cell_size});
-            grid[i][j].setPosition({static_cast<float>(j) * cell_size,
-                                    static_cast<float>(i) * cell_size});
+            grid[i][j].setPosition({static_cast<float>(j) * cell_size, static_cast<float>(i) * cell_size});
         }
     }
 }
