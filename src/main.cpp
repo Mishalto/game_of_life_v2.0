@@ -135,7 +135,6 @@ int main()
         window.clear();
         draw_grid(window, grid);
         window.display();
-
     }
 
     return 0;
