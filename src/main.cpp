@@ -16,9 +16,9 @@ void init_grid(std::vector<std::vector<sf::RectangleShape>>& grid) {
 }
 
 void set_start_postion(std::vector<std::vector<sf::RectangleShape>>& grid) {
-    std::vector<std::pair<int, int>> start_pos = {{28, 42}, {29, 42}, {30, 42}, {31, 42}, {32, 42}};    // x/y format
+    std::vector<std::pair<int, int>> start_pos = {{28, 42}, {29, 42}, {30, 42}, {31, 42}, {32, 42}};    // y/x format
     for (const auto& s : start_pos) {
-        grid[s.second][s.first].setFillColor(sf::Color::Cyan);
+        grid[s.first][s.second].setFillColor(sf::Color::Cyan);
     }
 }
 
