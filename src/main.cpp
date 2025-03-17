@@ -17,15 +17,12 @@ void init_grid(std::vector<std::vector<sf::RectangleShape>>& grid) {
 
 void set_start_postion(std::vector<std::vector<sf::RectangleShape>>& grid, std::vector<std::vector<bool>>& next_grid) {
     std::vector<std::pair<int, int>> start_pos = {
-        {10, 10}, {10, 11}, {11, 10}, {11, 11},
-        {10, 20}, {11, 20}, {12, 20}, {9, 21}, {13, 21}, {8, 22}, {14, 22}, {8, 23}, {14, 23}, {11, 24},
-        {9, 25}, {13, 25}, {10, 26}, {11, 26}, {12, 26}, {11, 27},
-        {8, 30}, {9, 30}, {10, 30}, {8, 31}, {9, 31}, {10, 31},
-        {7, 32}, {11, 32}, {6, 34}, {7, 34}, {11, 34}, {12, 34},
-        {8, 44}, {9, 44}, {8, 45}, {9, 45}
+        {26, 44}, {26, 45}, {27, 44}, {27, 45}, // Центральный блок
+        {26, 52}, {27, 52}, {28, 52}, {25, 53}, {29, 53}, {24, 54}, {30, 54},
+        {24, 55}, {30, 55}, {27, 56}, {25, 57}, {29, 57}, {26, 58}, {27, 58}, {28, 58}, {27, 59},
+        {26, 62}, {25, 62}, {24, 62}, {26, 63}, {25, 63}, {24, 63}, {23, 64}, {27, 64}, {23, 66}, {27, 66},
+        {28, 66}, {22, 68}, {23, 68}, {27, 68}, {28, 68}, {24, 78}, {25, 78}, {24, 79}, {25, 79}
     };
-    
-
 
     for (const auto& s : start_pos) {
         grid[s.first][s.second].setFillColor(sf::Color::Cyan);
@@ -107,7 +104,7 @@ int main()
     set_start_postion(grid, next_grid);
 
     sf::Clock clock;
-    constexpr sf::Time delay = sf::seconds(0.1f);
+    constexpr sf::Time delay = sf::seconds(0.05f);
 
     while (window.isOpen())
     {
