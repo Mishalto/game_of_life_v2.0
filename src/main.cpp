@@ -1,9 +1,16 @@
 #include <SFML/Graphics.hpp>
 #include <Constants.hpp>
 #include <iostream>
+#include <vector>
 #include <array>
 #include <thread>
 
+// Forward dec for convenience
+bool is_alive(const std::vector<std::vector<sf::RectangleShape>>& grid, int i, int j);
+bool is_dead(const std::vector<std::vector<sf::RectangleShape>>& grid, int i, int j);
+int count_living_neighbors(const std::vector<std::vector<sf::RectangleShape>>& grid, int i, int j);
+
+// Service
 void init_grid(std::vector<std::vector<sf::RectangleShape>>& grid) {
     for (size_t i = 0; i < grid.size(); ++i) {
         for (size_t j = 0; j < grid[i].size(); ++j) {
@@ -13,66 +20,6 @@ void init_grid(std::vector<std::vector<sf::RectangleShape>>& grid) {
         }
     }
 }
-
-void set_start_postion(std::vector<std::vector<bool>>& next_grid) {
-    std::vector<std::pair<int, int>> start_pos = {
-        {26, 44}, {26, 45}, {27, 44}, {27, 45},
-        {26, 52}, {27, 52}, {28, 52}, {25, 53}, {29, 53}, {24, 54}, {30, 54},
-        {24, 55}, {30, 55}, {27, 56}, {25, 57}, {29, 57}, {26, 58}, {27, 58}, {28, 58}, {27, 59},
-        {26, 62}, {25, 62}, {24, 62}, {26, 63}, {25, 63}, {24, 63}, {23, 64}, {27, 64}, {23, 66}, {27, 66},
-        {28, 66}, {22, 68}, {23, 68}, {27, 68}, {28, 68}, {24, 78}, {25, 78}, {24, 79}, {25, 79}
-    };
-
-    for (const auto& s : start_pos) {
-        next_grid[s.first][s.second] = true;
-    }
-}
-
-bool is_alive(const std::vector<std::vector<sf::RectangleShape>>& grid, int i, int j) {
-    return grid[i][j].getFillColor() == sf::Color::Cyan;
-}
-
-bool is_dead(const std::vector<std::vector<sf::RectangleShape>>& grid, int i, int j) {
-    return grid[i][j].getFillColor() == sf::Color::Black;
-}
-
-void update_grid(std::vector<std::vector<sf::RectangleShape>>& grid, std::vector<std::vector<bool>>& next_grid) {
-    for (int i = 0; i < static_cast<int>(grid.size()); ++i) {
-        for (int j = 0; j < static_cast<int>(grid[i].size()); ++j) {
-            int living_cells = 0;
-
-            // Top
-            if (i - 1 >= 0) {
-                if (j - 1 >= 0 && is_alive(grid, i - 1, j - 1)) { living_cells += 1; }
-                if (is_alive(grid, i - 1, j)) { living_cells += 1; }
-                if (j + 1 < static_cast<int>(grid[i].size()) && is_alive(grid, i - 1, j + 1)) { living_cells += 1; }
-            }
-
-            // Middle
-            if (j - 1 >= 0 && is_alive(grid, i, j - 1)) { living_cells += 1; }
-            if (j + 1 < static_cast<int>(grid[i].size()) && is_alive(grid, i, j + 1)) { living_cells +=1; }
-
-            // Bottom
-            if (i + 1 < static_cast<int>(grid.size())) {
-                if (j - 1 >= 0 && is_alive(grid, i + 1, j - 1)) { living_cells += 1; }
-                if (is_alive(grid, i + 1, j)) { living_cells += 1; }
-                if (j + 1 < static_cast<int>(grid[i].size()) && is_alive(grid, i + 1, j + 1)) { living_cells += 1; }
-            }
-
-            // Condition
-            if (is_dead(grid, i, j) && living_cells == 3) {
-                next_grid[i][j] = true;
-            }
-            if (is_alive(grid, i, j) && living_cells < 2) {
-                next_grid[i][j] = false;
-            }
-            if (is_alive(grid, i, j) && living_cells > 3) {
-                next_grid[i][j] = false;
-            }
-        }
-    }
-}
-
 void copy_grid(std::vector<std::vector<sf::RectangleShape>>& grid, std::vector<std::vector<bool>>& next_grid) {
     for (int i = 0; i < static_cast<int>(grid.size()); ++i) {
         for (int j = 0; j < static_cast<int>(grid[i].size()); ++j) {
@@ -84,12 +31,19 @@ void copy_grid(std::vector<std::vector<sf::RectangleShape>>& grid, std::vector<s
         }
     }
 }
-
 void draw_grid(sf::RenderWindow& window, std::vector<std::vector<sf::RectangleShape>>& grid) {
     for (const auto& s : grid) {
         for (const auto& j : s) {
             window.draw(j);
         }
+    }
+}
+
+void set_start_postion(std::vector<std::vector<bool>>& next_grid) {
+    std::vector<std::pair<int, int>> start_pos = {{20, 13}, {20, 14}, {20, 15}, {20, 16}, {20, 17}};
+
+    for (const auto& s : start_pos) {
+        next_grid[s.first][s.second] = true;
     }
 }
 
@@ -107,6 +61,53 @@ void check_events(sf::RenderWindow& window) {
     }
 }
 
+// Logic
+void update_grid(std::vector<std::vector<sf::RectangleShape>>& grid, std::vector<std::vector<bool>>& next_grid) {
+    for (int i = 0; i < static_cast<int>(grid.size()); ++i) {
+        for (int j = 0; j < static_cast<int>(grid[i].size()); ++j) {
+            int living_cells = count_living_neighbors(grid, i, j);
+
+            // Condition
+            if (is_dead(grid, i, j) && living_cells == 3) {
+                next_grid[i][j] = true;
+            }
+            if (is_alive(grid, i, j) && living_cells < 2) {
+                next_grid[i][j] = false;
+            }
+            if (is_alive(grid, i, j) && living_cells > 3) {
+                next_grid[i][j] = false;
+            }
+        }
+    }
+}
+
+int count_living_neighbors(const std::vector<std::vector<sf::RectangleShape>>& grid, int i, int j) {
+    constexpr int directions_count = 8;
+    static const std::array<std::pair<int, int>, directions_count> directions = {{
+        {-1, -1}, {-1, 0}, {-1, 1},
+        {0, -1}, {0, 1},
+        {1, -1}, {1, 0}, {1, 1}
+    }};
+    int living_cells = 0;
+    for (const auto& [di, dj] : directions) {
+        int ni = di + i;
+        int nj = dj + j;
+        if ((ni >= 0 && ni < static_cast<int>(grid.size()) &&
+            nj >= 0 && nj < static_cast<int>(grid.size()))
+            && is_alive(grid, ni, nj)) {
+                living_cells += 1;
+            }
+    }
+
+    return living_cells;
+}
+bool is_alive(const std::vector<std::vector<sf::RectangleShape>>& grid, int i, int j) {
+    return grid[i][j].getFillColor() == sf::Color::Cyan;
+}
+bool is_dead(const std::vector<std::vector<sf::RectangleShape>>& grid, int i, int j) {
+    return grid[i][j].getFillColor() == sf::Color::Black;
+}
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode({width, height}), "Game of Life 2.0", sf::Style::None);
@@ -118,7 +119,7 @@ int main()
     set_start_postion(next_grid);
 
     sf::Clock clock;
-    constexpr sf::Time delay = sf::seconds(0.05f);
+    constexpr sf::Time delay = sf::seconds(0.2f);
 
     while (window.isOpen())
     {
