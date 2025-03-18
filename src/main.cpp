@@ -36,7 +36,9 @@ void copy_grid(std::vector<std::vector<sf::RectangleShape>>& grid, std::vector<s
 void draw_grid(sf::RenderWindow& window, std::vector<std::vector<sf::RectangleShape>>& grid) {
     for (const auto& s : grid) {
         for (const auto& j : s) {
-            window.draw(j);
+            if (j.getFillColor() == sf::Color::Cyan) {
+                window.draw(j);
+            }
         }
     }
 }
