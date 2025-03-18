@@ -116,7 +116,7 @@ bool is_dead(const std::vector<std::vector<sf::RectangleShape>>& grid, int i, in
 int main()
 {
     sf::RenderWindow window(sf::VideoMode({width, height}), "Game of Life 2.0", sf::Style::None);
-    window.setFramerateLimit(144);
+    window.setFramerateLimit(10000);
 
     std::vector<std::vector<sf::RectangleShape>> grid(y_cells, std::vector<sf::RectangleShape>(x_cells));
     init_grid(grid);
