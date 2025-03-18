@@ -15,7 +15,7 @@ FetchContent_Declare(SFML
     EXCLUDE_FROM_ALL
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
-add_executable(game_of_life_v2.0 src/main.cpp)
+add_executable(game_of_life_v2.0 src/main.cpp src/Timer.cpp)
 
 # find_package(SFML 3 REQUIRED COMPONENTS Graphics Audio Network)
 

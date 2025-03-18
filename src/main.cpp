@@ -5,6 +5,8 @@
 #include <array>
 #include <thread>
 
+#include <Timer.hpp>
+
 // Forward dec for convenience
 bool is_alive(const std::vector<std::vector<sf::RectangleShape>>& grid, int i, int j);
 bool is_dead(const std::vector<std::vector<sf::RectangleShape>>& grid, int i, int j);
@@ -101,6 +103,7 @@ int count_living_neighbors(const std::vector<std::vector<sf::RectangleShape>>& g
 
     return living_cells;
 }
+
 bool is_alive(const std::vector<std::vector<sf::RectangleShape>>& grid, int i, int j) {
     return grid[i][j].getFillColor() == sf::Color::Cyan;
 }
@@ -118,18 +121,16 @@ int main()
     std::vector<std::vector<bool>> next_grid(y_cells, std::vector<bool>(x_cells));
     set_start_postion(next_grid);
 
-    sf::Clock clock;
-    constexpr sf::Time delay = sf::seconds(0.2f);
+    Timer timer(0.2f);
 
     while (window.isOpen())
     {
+        timer.start();
         copy_grid(grid, next_grid);
-        sf::Time elapsed = clock.getElapsedTime();
-
         check_events(window);
-        if (elapsed >= delay) {
+
+        if (timer.is_time_elapsed()) {
             update_grid(grid, next_grid);
-            clock.restart();
         }
 
         window.clear();
