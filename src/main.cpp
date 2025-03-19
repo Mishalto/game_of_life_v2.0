@@ -93,6 +93,7 @@ int count_living_neighbors(const std::vector<std::vector<sf::RectangleShape>>& g
         {1, -1}, {1, 0}, {1, 1}
     }};
     int living_cells = 0;
+
     for (const auto& [di, dj] : directions) {
         int ni = di + i;
         int nj = dj + j;
