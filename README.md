@@ -13,6 +13,9 @@ Conway's Game of Life is a cellular automaton devised by mathematician John Conw
 
 It is a zero-player game, meaning its evolution is determined by its initial state, requiring no further input after the start.  
 
+## Design
+To set the initial positions of the cells, the set_start_position function is used. You need to specify the coordinates of all living cells in a vector, along with their count.  
+
 ## Build
 1. Clone the repository  
 2. Open the project in CMake.  
